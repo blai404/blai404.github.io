@@ -8,14 +8,14 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>我在Windows环境下创建了第一个博客 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="第一章前言​        这是我入坑Java后用Hexo制作的第一个静态博客，制作过程通过观看B站CodeSheep的视频和各种解bug的博客，非常感谢他们！ 步骤一：安装好NodeJs和gitNodeJs安装方面看不懂我总结的操作的小伙伴可以参考https:&#x2F;&#x2F;blog.csdn.net&#x2F;zjh_746140129&#x2F;article&#x2F;details&#x2F;80460965，很详细。 1、安装NodeJ">
+  <meta name="description" content="前言​        这是我入坑Java后用Hexo制作的第一个静态博客，制作过程通过观看B站CodeSheep的视频和各种解bug的博客，非常感谢他们！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我在Windows环境下创建了第一个博客">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;02&#x2F;%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="第一章前言​        这是我入坑Java后用Hexo制作的第一个静态博客，制作过程通过观看B站CodeSheep的视频和各种解bug的博客，非常感谢他们！ 步骤一：安装好NodeJs和gitNodeJs安装方面看不懂我总结的操作的小伙伴可以参考https:&#x2F;&#x2F;blog.csdn.net&#x2F;zjh_746140129&#x2F;article&#x2F;details&#x2F;80460965，很详细。 1、安装NodeJ">
+<meta property="og:description" content="前言​        这是我入坑Java后用Hexo制作的第一个静态博客，制作过程通过观看B站CodeSheep的视频和各种解bug的博客，非常感谢他们！">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-02T16:00:46.792Z">
+<meta property="og:updated_time" content="2019-12-02T17:30:55.023Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -172,7 +172,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h3><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​        这是我入坑Java后用Hexo制作的第一个静态博客，制作过程通过观看B站CodeSheep的视频和各种解bug的博客，非常感谢他们！</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​        这是我入坑Java后用Hexo制作的第一个静态博客，制作过程通过观看B站CodeSheep的视频和各种解bug的博客，非常感谢他们！</p>
+<a id="more"></a>
+
+
 <h3 id="步骤一：安装好NodeJs和git"><a href="#步骤一：安装好NodeJs和git" class="headerlink" title="步骤一：安装好NodeJs和git"></a>步骤一：安装好NodeJs和git</h3><p>NodeJs安装方面看不懂我总结的操作的小伙伴可以参考<a href="https://blog.csdn.net/zjh_746140129/article/details/80460965，很详细。" target="_blank" rel="noopener">https://blog.csdn.net/zjh_746140129/article/details/80460965，很详细。</a></p>
 <p>1、安装NodeJs。安装包可以直接从官网上下，无论是下解压版还是安装程序都一样；</p>
 <p>2、配置NodeJs的环境变量，并在安装Node的目录下创建两个文件夹：node_global和node_cache；</p>
@@ -190,8 +193,8 @@
 <p>4、到这一步，博客就初始化完成了，cmd进入创建的博客文件夹目录下，通过hexo server开启hexo服务，然后通过localhost:4000就能本地登录博客了；</p>
 <h4 id="至此，博客创建完成！"><a href="#至此，博客创建完成！" class="headerlink" title="至此，博客创建完成！"></a>至此，博客创建完成！</h4><h3 id="写博客"><a href="#写博客" class="headerlink" title="写博客"></a>写博客</h3><p>1、进入博客网页后，会自动生成一个Hello博客，博客内容是一系列从操作hexo的命令；</p>
 <p>2、在cmd界面上输入hexo n “博客名”，就会在你的博客目录下再生成一个后缀为md的博客文件，给博客加内容可以通过cmd进入vim编辑器打开文件或者下载Typora（推荐）进行内容编辑；</p>
-<p>3、每次修改完博客都可以在blog目录下进行下列命令：</p>
-<p>​        hexo clean：清理hexo数据痕迹；</p>
+<p>3、修改完博客可以在blog目录下进行下列命令：</p>
+<p>​        hexo clean：清理hexo数据痕迹；（同时删除页面样式）</p>
 <p>​        hexo g：生成hexo修改数据；</p>
 <h3 id="将博客部署到远端（github）"><a href="#将博客部署到远端（github）" class="headerlink" title="将博客部署到远端（github）"></a>将博客部署到远端（github）</h3><p>1、登录github网站，建立仓库：<strong>注意，仓库名必须和github用户名相同</strong>，否则推到服务端会报404；</p>
 <p>2、在blog目录下安装git插件：</p>
