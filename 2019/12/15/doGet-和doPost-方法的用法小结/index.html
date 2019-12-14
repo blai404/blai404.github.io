@@ -6,14 +6,16 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blai404.github.io">
-  <title>me导入dom4j的jar包 | blai404_blog</title>
+  <title>doGet()和doPost()方法的用法小结 | blai404_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="me导入dom4j的jar包">
-<meta property="og:url" content="http:&#x2F;&#x2F;blai404.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;me%E5%AF%BC%E5%85%A5dom4j%E7%9A%84jar%E5%8C%85&#x2F;index.html">
+  <meta name="description" content="案例： ​    登录界面+验证码 ​    访问登录界面login.jsp时会有两个请求，加载页面时会请求VerifyCodeServlet页面，获取验证码图片，此过程用的是doGet();输入用户名和密码后，会跳转到LoginServlet，表单提交，用的是doPost(); 小结：    1、doGet()一般用于向服务器请求数据，doPost()一般用于向服务器提交数据；    2、表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="doGet()和doPost()方法的用法小结">
+<meta property="og:url" content="http:&#x2F;&#x2F;blai404.github.io&#x2F;2019&#x2F;12&#x2F;15&#x2F;doGet-%E5%92%8CdoPost-%E6%96%B9%E6%B3%95%E7%9A%84%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93&#x2F;index.html">
 <meta property="og:site_name" content="blai404_blog">
+<meta property="og:description" content="案例： ​    登录界面+验证码 ​    访问登录界面login.jsp时会有两个请求，加载页面时会请求VerifyCodeServlet页面，获取验证码图片，此过程用的是doGet();输入用户名和密码后，会跳转到LoginServlet，表单提交，用的是doPost(); 小结：    1、doGet()一般用于向服务器请求数据，doPost()一般用于向服务器提交数据；    2、表">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-08T16:45:02.090Z">
+<meta property="og:updated_time" content="2019-12-14T18:47:40.791Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="blai404_blog" type="application/atom+xml">
@@ -150,20 +152,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-me导入dom4j的jar包" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-doGet-和doPost-方法的用法小结" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      me导入dom4j的jar包
+      doGet()和doPost()方法的用法小结
     </h1>
   
 
         
-        <a href="/2019/12/09/me%E5%AF%BC%E5%85%A5dom4j%E7%9A%84jar%E5%8C%85/" class="archive-article-date">
-  	<time datetime="2019-12-08T16:39:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-09</time>
+        <a href="/2019/12/15/doGet-%E5%92%8CdoPost-%E6%96%B9%E6%B3%95%E7%9A%84%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" class="archive-article-date">
+  	<time datetime="2019-12-14T17:38:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-15</time>
 </a>
         
       </header>
@@ -171,14 +173,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<a id="more"></a>
-
-<p>1、在project目录下新建一个文件夹</p>
-<p>2、复制dom4j的jar包到新建的文件内</p>
-<p>3、右击jar包，选择build path—&gt;add to buildpath</p>
-<p>4、生成奶瓶装的jar包，就表示导入成功</p>
 </blockquote>
-<h4 id="导入xpath包步骤跟dom4j一样"><a href="#导入xpath包步骤跟dom4j一样" class="headerlink" title="导入xpath包步骤跟dom4j一样"></a>导入xpath包步骤跟dom4j一样</h4>
+<p>案例：</p>
+<p>​    登录界面+验证码</p>
+<p>​    访问登录界面login.jsp时会有两个请求，加载页面时会请求VerifyCodeServlet页面，获取验证码图片，此过程用的是doGet();<br>输入用户名和密码后，会跳转到LoginServlet，表单提交，用的是doPost();</p>
+<p>小结：<br>    1、doGet()一般用于向服务器请求数据，doPost()一般用于向服务器提交数据；<br>    2、表单提交一般用post方式提交；<br>    3、浏览器默认get方式请求数据，因此VerifyCodeServlet页面用doPot()方法会报错；<br>    （其他区别见思维导图）</p>
+
       
 
       
@@ -267,7 +267,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://blai404.github.io/2019/12/09/me%E5%AF%BC%E5%85%A5dom4j%E7%9A%84jar%E5%8C%85/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blai404.github.io/2019/12/15/doGet-%E5%92%8CdoPost-%E6%96%B9%E6%B3%95%E7%9A%84%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -281,18 +281,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/12/15/doGet-%E5%92%8CdoPost-%E6%96%B9%E6%B3%95%E7%9A%84%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          doGet()和doPost()方法的用法小结
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/12/08/myeclipse%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">myeclipse安装教程</div>
+    <a href="/2019/12/09/me%E5%AF%BC%E5%85%A5dom4j%E7%9A%84jar%E5%8C%85/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">me导入dom4j的jar包</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -319,7 +310,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#导入xpath包步骤跟dom4j一样"><span class="toc-number">1.</span> <span class="toc-text">导入xpath包步骤跟dom4j一样</span></a></li></ol>
+                    目录，不存在的…
                     </div>
                 </span>
             </div>
