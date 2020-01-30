@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="blai404_blog">
 <meta property="og:description" content="异常Error creating bean with name ‘systemController’: Unsatisfied dependency expressed through field">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-30T15:07:20.320Z">
+<meta property="og:updated_time" content="2020-01-30T15:10:46.220Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="blai404_blog" type="application/atom+xml">
@@ -177,10 +177,16 @@
 
 <p>项目：SSM框架管理系统脚手架</p>
 <p>在编写SSM框架管理系统时，出现上述异常。总体意思就是依赖产生失败<br>查看cause by，具体问题出现在UserDao、UserService、UserServiceImpl三个之中某一类上</p>
-<p>百度解决办法：<br>userDao的类上未添加@Repository注解，或者UserService、UserServiceImpl的类上未添加@Service注解</p>
+<p>百度解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">userDao的类上未添加@Repository注解，或者UserService、UserServiceImpl的类上未添加@Service注解</span></pre></td></tr></table></figure>
+
 <p>检查代码，发现都添加了，并不是未添加的情况</p>
-<p>再仔细看百度的说法：<br>    没有添加注解，对象未注入容器中……注入容器中……注入容器中……注入容器中……</p>
-<p>突然想到<br>加了@Repository注解后，有将dao的UserDao改过名的操作<br>既然是注入容器，容器中是否存在缓存，存在的依然是改名前的对象，改名后的对象并没有注入容器中<br>将@Repository注解删除重新添加，问题解决</p>
+<p>再仔细看百度的说法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">没有添加注解，对象未注入容器中……注入容器中……注入容器中……注入容器中……</span></pre></td></tr></table></figure>
+
+<p>突然想到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">加了@Repository注解后，有将dao的UserDao改过名的操作</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">既然是注入容器，容器中是否存在缓存，存在的依然是改名前的对象，改名后的对象并没有注入容器中</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">将@Repository注解删除重新添加，问题解决</span></pre></td></tr></table></figure>
+
 <p>此想法日后查资料有待证明！！！</p>
 
       
