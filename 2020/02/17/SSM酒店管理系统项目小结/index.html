@@ -6,19 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blai404.github.io">
-  <title>Java思想总结2.0 | blai404_blog</title>
+  <title>SSM酒店管理系统项目小结 | blai404_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="2020-2-8">
+  <meta name="description" content="今天终于完成了酒店管理系统，至此，为了巩固SSM框架而磕的两个项目暂时告一段落。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java思想总结2.0">
-<meta property="og:url" content="http:&#x2F;&#x2F;blai404.github.io&#x2F;2020&#x2F;02&#x2F;08&#x2F;Java%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%932-0&#x2F;index.html">
+<meta property="og:title" content="SSM酒店管理系统项目小结">
+<meta property="og:url" content="http:&#x2F;&#x2F;blai404.github.io&#x2F;2020&#x2F;02&#x2F;17&#x2F;SSM%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B0%8F%E7%BB%93&#x2F;index.html">
 <meta property="og:site_name" content="blai404_blog">
-<meta property="og:description" content="2020-2-8">
+<meta property="og:description" content="今天终于完成了酒店管理系统，至此，为了巩固SSM框架而磕的两个项目暂时告一段落。">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;blai404.github.io&#x2F;img&#x2F;%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%93&#x2F;2.0.jpg">
-<meta property="og:updated_time" content="2020-02-08T08:01:14.266Z">
+<meta property="og:updated_time" content="2020-02-17T09:26:49.971Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;blai404.github.io&#x2F;img&#x2F;%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%93&#x2F;2.0.jpg">
   
     <link rel="alternative" href="/atom.xml" title="blai404_blog" type="application/atom+xml">
   
@@ -154,33 +152,37 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Java思想总结2-0" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-SSM酒店管理系统项目小结" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Java思想总结2.0
+      SSM酒店管理系统项目小结
     </h1>
   
 
         
-        <a href="/2020/02/08/Java%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%932-0/" class="archive-article-date">
-  	<time datetime="2020-02-08T07:55:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-08</time>
+        <a href="/2020/02/17/SSM%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B0%8F%E7%BB%93/" class="archive-article-date">
+  	<time datetime="2020-02-17T08:51:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>2020-2-8</p>
+        <p>今天终于完成了酒店管理系统，至此，为了巩固SSM框架而磕的两个项目暂时告一段落。</p>
 <a id="more"></a>
-</blockquote>
-<blockquote>
-<p><img src="/img/%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%93/2.0.jpg" alt></p>
-</blockquote>
+
+<ul>
+<li>系统采用技术： <strong>spring+springMVC+mybaits+EasyUI+jQuery+Ajax+面向接口编程+ECharts</strong></li>
+</ul>
+<p>与前一个SSM管理系统脚手架一样，酒店管理系统项目大体上也是<strong>《思想总结2.0》</strong>画的那一张图的思想；<br>但不同的是：<br>    1）SSM管理系统脚手架基本是个后端的项目，需要改动的页面不多，而酒店管理系统则分前台和后台，用的是酒店页面模板（简单的jsp+js+css)；<br>    2）SSM管理系统脚手架设计的数据表只有角色表，用户表和功能表；<br>        而酒店管理系统是基于脚手架而做的，不仅有上面三个表，还涉及了酒店预订、入住、房间、房型等，多表操作很多。（嗯，很好地练了下数据逻辑关系）</p>
+<p>3）这次酒店关系系统比较新的是，多了个营业额统计，也就是在页面显示图表，通过时间将营业额计算出来并绘制成图表，用的<strong>Apache的ECharts图表</strong>样式（<em>学习方法：*</em>跟easyui一样，去官网阅读文档，查看小实例*）<br>        另外，计算营业额用到的MySQL的语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">sum</span>(checkinPrice) <span class="keyword">as</span> money,<span class="keyword">DATE_FORMAT</span>(createTime,<span class="string">'%Y-%m'</span>) <span class="keyword">as</span> stats_date <span class="keyword">from</span> checkin <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">DATE_FORMAT</span>(createTime,<span class="string">'%Y-%m'</span>)</span></pre></td></tr></table></figure>
+
+<p>​        之前没怎么用过MySQL的函数进行数据查询，谨记！！！</p>
 
       
 
@@ -270,7 +272,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://blai404.github.io/2020/02/08/Java%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%932-0/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blai404.github.io/2020/02/17/SSM%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B0%8F%E7%BB%93/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -284,18 +286,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/02/17/SSM%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B0%8F%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          SSM酒店管理系统项目小结
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/02/07/SQL%E6%B7%BB%E5%8A%A0%E5%A4%96%E9%94%AE1452%E9%94%99%E8%AF%AF/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">SQL添加外键1452错误</div>
+    <a href="/2020/02/08/Java%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%932-0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java思想总结2.0</div>
       <i class="icon-circle-right"></i>
     </a>
   
