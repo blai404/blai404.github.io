@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>java.sql.SQLSyntaxErrorException:sql_mode=only_full_group_by</title>
+    <url>/2020/03/18/java-sql-SQLSyntaxErrorException-sql-mode-only-full-group-by/</url>
+    <content><![CDATA[<p>Error Code: 1055.Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column person_info.</p>
+<a id="more"></a>
+
+<p>问题描述：</p>
+<p>在项目mapper文件中做查询，其中一条查询语句用到了 <strong><em>Group By</em></strong> ，运行之后，报错：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'tt.from_id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by</span></pre></td></tr></table></figure>
+
+<p>复制粘贴SQL语句去数据库查询，也是报同样的错误，那么就不是代码问题了（也检查过了确实没问题），再检查SQL语法，也是没问题。</p>
+<p>于是度娘。</p>
+<p>原因：</p>
+<p>SQL模式默认情况下是only_full_group_by ，MySQL就会拒绝选择列表、条件或顺序列表引用的查询，这些查询将引用组中未命名的非聚合列，而不是在功能上依赖于它们。</p>
+<p>OK清楚了原因之后就是改配置了：</p>
+<p>在mysql下执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set global sql_mode&#x3D;&#39;STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION&#39;;</span></pre></td></tr><tr><td class="code"><pre><span class="line">mysql&gt; set session sql_mode&#x3D;&#39;STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION&#39;;</span></pre></td></tr></table></figure>
+
+<p>问题解决。</p>
+]]></content>
+      <categories>
+        <category>MySQL相关</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>阿里云部署java项目</title>
+    <url>/2020/03/08/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/</url>
+    <content><![CDATA[<blockquote>
+<a id="more"></a>
+
+<h2 id="阿里云部署java项目步骤："><a href="#阿里云部署java项目步骤：" class="headerlink" title="阿里云部署java项目步骤："></a>阿里云部署java项目步骤：</h2><h3 id="一、阿里云官网申请云服务器ESC"><a href="#一、阿里云官网申请云服务器ESC" class="headerlink" title="一、阿里云官网申请云服务器ESC"></a>一、阿里云官网申请云服务器ESC</h3><p><img src="/img/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE_2020-03-08_13-10-20.png" alt></p>
+<p>申请后进入远程连接</p>
+<p><em>注意：进入后的命令行界面是==linux系统==的。</em></p>
+<h3 id="二、在远程服务器上安装JDK、Tomcat、Redis和MySQL"><a href="#二、在远程服务器上安装JDK、Tomcat、Redis和MySQL" class="headerlink" title="二、在远程服务器上安装JDK、Tomcat、Redis和MySQL"></a>二、在远程服务器上安装JDK、Tomcat、Redis和MySQL</h3><p>JDK版本：jdk-8u221-linux-x64.rpm</p>
+<p>Tomcat版本：apache-tomcat-8.5.51.tar.gz</p>
+<p>Redis版本：redis-4.0.14.tar.gz</p>
+<p>MySQL版本：mysql57-community-release-el7-11.noarch.rpm</p>
+<p>安装包和压缩包去各官网下载即可。</p>
+<p>windows系统可利用<strong>FileZilla FTP Client</strong>工具将下载到本地的安装包上传到服务器上。</p>
+<p>这边有个小bug：</p>
+<p>利用FileZilla连接服务器时，会一直报连接超时，原因是阿里云给出的官方文档上端口号写的是21，实际上是==22==，改为22就可以连接上并上传文件了。</p>
+<p>之后就是安装问题：</p>
+<h4 id="1、JDK安装"><a href="#1、JDK安装" class="headerlink" title="1、JDK安装"></a>1、JDK安装</h4><p>在软件路径里执行</p>
+<p>1）//添加可执行权限</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;chmod +x jdk-8u221-linux-x64.rpm</span></pre></td></tr></table></figure>
+
+<p>2）//安装RPM软件包</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;rpm -ivh jdk-8u221-linux-x64.rpm</span></pre></td></tr></table></figure>
+
+<p>3）//查看java版本，若出现版本信息就是成功</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;java -version</span></pre></td></tr></table></figure>
+
+<h4 id="2、MySQL安装"><a href="#2、MySQL安装" class="headerlink" title="2、MySQL安装"></a>2、MySQL安装</h4><p>1）安装用来配置mysql的yum源的rpm包</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;rpm -Uvh mysql57-community-release-el7-11.noarch.rpm</span></pre></td></tr></table></figure>
+
+<p>2）安装Mysql</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;yum install mysql-community-server</span></pre></td></tr></table></figure>
+
+<p>3）开启mysql服务</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;service mysqld start</span></pre></td></tr></table></figure>
+
+<p>4）mysql安装成功后创建的超级用户’root’@‘localhost’的密码会被存储在/var/log/mysqld.log，可以使用如下命令查看密码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;grep &#39;temporary password&#39; &#x2F;var&#x2F;log&#x2F;mysqld.log</span></pre></td></tr></table></figure>
+
+<p>5）使用mysql生成的’root’@‘localhost’用户和密码登录数据库，并修改 其密码，具体命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;mysql -uroot -p</span></pre></td></tr><tr><td class="code"><pre><span class="line">&gt;ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;BlaiXXX!&#39;;</span></pre></td></tr></table></figure>
+
+<p>改密码期间会提示要先设置密码，可以先用</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;SET PASSWORD = 'XXXXX';</span></pre></td></tr></table></figure>
+
+<p>这样就会改变提示：密码设置不合理，之后就可以用ALTER语句设置密码了</p>
+<h4 id="3、安装redis"><a href="#3、安装redis" class="headerlink" title="3、安装redis"></a>3、安装redis</h4><p>1）首先先解压redis安装包</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;tar -zxvf redis-4.0.14.tar.gz</span></pre></td></tr></table></figure>
+
+<p>2）设置redis以支持远程登录</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;vi redis-4.0.14/redis.conf</span></pre></td></tr></table></figure>
+
+<p>将bind 127.0.0.1这句话用’#’号注释掉，这样就能支持远程连接了<br><img src="/img/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/4651b800a4aa86150eb69d2828da4130_59da30d50001a68521601362.png" alt></p>
+<p>3）给redis.conf添加配置以支持redis作为守护进程一直跑在后台需要加入<br><img src="/img/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/88c45b71cf8b3cc723bfa5d0544cc1c1_59da313000013ead08650187.png" alt></p>
+<p>4）去到解压后的目录里</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;cd redis-4.0.14</span></pre></td></tr></table></figure>
+
+<p>​    5）启动redis服务</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;src/redis-server redis.conf</span></pre></td></tr></table></figure>
+
+<p>6）redis连接测试，通过redis-cli连接到redis服务器</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;src/redis-cli</span></pre></td></tr></table></figure>
+
+<p>当输入ping 得到pong的回应之后，证明redis配置已经完成</p>
+<h4 id="4、安装Tomcat"><a href="#4、安装Tomcat" class="headerlink" title="4、安装Tomcat"></a>4、安装Tomcat</h4><p>1）解压tomcat压缩包</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;tar -zxvf apache-tomcat-8.5.51.tar.gz</span></pre></td></tr></table></figure>
+
+<p>2）启动tomcat</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;./apache-tomcat-8.5.51/bin/startup.sh</span></pre></td></tr></table></figure>
+
+<p>3）修改tomcat默认启动端口，从8080修改为80端口，便于微信登录</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;vi apache-tomcat-8.5.51/conf/server.xml</span></pre></td></tr></table></figure>
+
+<p><img src="/img/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/20906c11645cd990be30e88626148fe0_59da31960001a44d21681462.png" alt></p>
+<p>之后在末尾加上项目图片资源路径：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;<span class="tag">&lt;<span class="name">Context</span> <span class="attr">docBase</span>=<span class="string">"/User/baidu/work/image/upload"</span> <span class="attr">path</span>=<span class="string">"/upload"</span>/&gt;</span></span></pre></td></tr></table></figure>
+
+<p>3）重启tomcat</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;./apache-tomcat-8.0.46/bin/shutdown.sh</span></pre></td></tr><tr><td class="code"><pre><span class="line">&gt;./apache-tomcat-8.0.46/bin/startup.sh</span></pre></td></tr></table></figure>
+
+<p>这边要<strong>注意</strong>的是：末尾添加的图片资源必须存在，也就是==必须先创建好文件夹==，不然shutdown会报Tomcat未开启！！！</p>
+<p>创建文件夹可以在可视化工具创建，也可以直接命令</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;mkdir /User/baidu/work/image/upload</span></pre></td></tr></table></figure>
+
+<h3 id="三、配置安全组"><a href="#三、配置安全组" class="headerlink" title="三、配置安全组"></a>三、配置安全组</h3><p>项目环境安装好后，需要在阿里云配置安全组：</p>
+<p><img src="/img/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE_2020-03-08_13-48-44.png" alt></p>
+<h3 id="四、项目上传"><a href="#四、项目上传" class="headerlink" title="四、项目上传"></a>四、项目上传</h3><p>将项目打包成war包，上传到tomcat安装目录下的webapps，tomcat就会自动生成项目环境了。</p>
+<p>还有个可能的问题：</p>
+<p>页面显示了，但是没有数据。原因：==数据库拒绝连接，也就是项目连接不上服务器的MySQL==！</p>
+<p>解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;mysql&gt; grant all privileges on *.* to root@&#39;%&#39; identified by &#39;密码&#39;;</span></pre></td></tr><tr><td class="code"><pre><span class="line">&gt;mysql&gt; flush privileges;</span></pre></td></tr></table></figure>
+
+<p>退出后问题就解决了~</p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>Maven install报错Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.12.4:test</title>
+    <url>/2020/03/02/Maven-install%E6%8A%A5%E9%94%99Failed-to-execute-goal-org-apache-maven-plugins-maven-surefire-plugin-2-12-4-test/</url>
+    <content><![CDATA[<blockquote>
+<a id="more"></a>
+
+<p>报错原因是 src/test下的测试类无法build</p>
+<p>根据报错信息：可能是缺少<em>maven-surefire-plugin:2.12.4</em></p>
+<p>于是写入pom.xml文件以下插件：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;<span class="tag">&lt;<span class="name">plugin</span>&gt;</span>  </span></pre></td></tr><tr><td class="code"><pre><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>  </span></pre></td></tr><tr><td class="code"><pre><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-surefire-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>  </span></pre></td></tr><tr><td class="code"><pre><span class="line">       <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span>  </span></pre></td></tr><tr><td class="code"><pre><span class="line">       <span class="tag">&lt;<span class="name">configuration</span>&gt;</span>  </span></pre></td></tr><tr><td class="code"><pre><span class="line">         <span class="tag">&lt;<span class="name">skipTests</span>&gt;</span>true<span class="tag">&lt;/<span class="name">skipTests</span>&gt;</span>  </span></pre></td></tr><tr><td class="code"><pre><span class="line">       <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span>  </span></pre></td></tr><tr><td class="code"><pre><span class="line">&gt;<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span> </span></pre></td></tr></table></figure>
+
+<p>再次执行<em>mvn install</em>，仍然报相同的错，于是将test下的类跳过，不进行build：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;mvn clean <span class="keyword">package</span> -Dmaven.test.skip=<span class="keyword">true</span></span></pre></td></tr></table></figure>
+
+<p>再次打包，解决。</p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>MySQL列字节数767限制</title>
+    <url>/2020/02/25/MySQL%E5%88%97%E5%AD%97%E8%8A%82%E6%95%B0767%E9%99%90%E5%88%B6/</url>
+    <content><![CDATA[<blockquote>
+<a id="more"></a>
+
+<p>今日创建表时，定义一个列类型为 vachar(1024)，并需要添加为唯一列。</p>
+<p>添加之，报错：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;Specified key was too long; max key length is 767 bytes</span></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>用的是MySQL5.5，创建表时的编码为UTF8；</p>
+</blockquote>
+<blockquote>
+<p>于是计算 767/3<strong>（UTF8占3位）</strong>，将varchar(1024)改为varchar(255)，解决。</p>
+<p>但担心后续项目可能需要比这更大的空间，于是百度扩大字节数的办法。</p>
+<p>百度到了两个方法：</p>
+<ul>
+<li><strong>启用innodb_large_prefix，那么限制值会增加到3072</strong></li>
+<li><strong>在创建表定义<em>ENGINE=INNODB<em>语句后加一句</em>ROW_FORMAT=DYNAMIC</em></strong></li>
+</ul>
+<p>均尝试之，仍报错。</p>
+<p>后来查看官方解释，innodb_large_prefix=1的启用是在<em>MySQL5.6.3</em>版本之后才有的功能，我用的是<em>MySQL5.5</em>，所以尽管设置了也无效。至于<em>ROW_FORMAT=DYNAMIC</em>，将表设置为<em>动态表</em>为何无效？找不到具体原因，猜测可能也是版本原因，5.5版本的字节数无法扩容。</p>
+<p>但我的5.5版本内有多张表数据，更换版本加移除实在麻烦。百度后才了解到一个电脑可使用多个MySQL，只需要使用不同端口号和名字加以区分就行。</p>
+<p><a href="https://blog.csdn.net/weixin_41953055/article/details/79820221">参考博客</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>MySQL相关</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>创建Maven项目文件报错问题</title>
+    <url>/2020/02/24/%E5%88%9B%E5%BB%BAMaven%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<blockquote>
+<p>o2o商铺项目</p>
+<a id="more"></a>
+
+<p>一、index.jsp头部报错</p>
+<p>因为项目没导入tomcat，配置好tomcat就行了</p>
+<p><img src="/img/%E5%88%9B%E5%BB%BAMaven%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE_2020-02-24_23-40-06.png" alt></p>
+<p>二、pom.xml文件头部报错</p>
+<p>异常显示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;Description Resource Path Location Type </span></pre></td></tr><tr><td class="code"><pre><span class="line">&gt;org.apache.maven.archiver.MavenArchiver.getManifest(org.apache.maven.project.MavenProject, org.apache.maven.archiver.MavenArchiveConfiguration) pom.xml /HelloSpringBoot line <span class="number">1</span> Maven Configuration Problem</span></pre></td></tr></table></figure>
+
+<p>百度技术博客说可以进入Install New Software中进行Maven更新再重启</p>
+<p><a href="http://stackoverflow.com/questions/37555557/m2e-error-in-mavenarchiver-getmanifest">查阅网站</a></p>
+<p>输入两个地址就行：</p>
+<ul>
+<li><p><code>https://otto.takari.io/content/sites/m2e.extras/m2eclipse-mavenarchiver/0.17.2/N/LATEST/</code> </p>
+</li>
+<li><p><code>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/LATEST/</code></p>
+<p>尝试，第一个网站报Unable connected错误，第二个报No Implements错误</p>
+</li>
+</ul>
+<p>当时用的是Maven3.9.3，尝试了许久、很多办法均无用</p>
+<p>后来更换版本为3.3.9，就解决了</p>
+<p><strong>看来得找个时间好好梳理梳理各种工具之间的版本问题了！</strong></p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>SSM酒店管理系统项目小结</title>
+    <url>/2020/02/17/SSM%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B0%8F%E7%BB%93/</url>
+    <content><![CDATA[<p>今天终于完成了酒店管理系统，至此，为了巩固SSM框架而磕的两个项目暂时告一段落。</p>
+<a id="more"></a>
+
+<ul>
+<li>系统采用技术： <strong>spring+springMVC+mybaits+EasyUI+jQuery+Ajax+面向接口编程+ECharts</strong></li>
+</ul>
+<p>与前一个SSM管理系统脚手架一样，酒店管理系统项目大体上也是<strong>《思想总结2.0》</strong>画的那一张图的思想；<br>但不同的是：<br>    1）SSM管理系统脚手架基本是个后端的项目，需要改动的页面不多，而酒店管理系统则分前台和后台，用的是酒店页面模板（简单的jsp+js+css)；<br>    2）SSM管理系统脚手架设计的数据表只有角色表，用户表和功能表；<br>        而酒店管理系统是基于脚手架而做的，不仅有上面三个表，还涉及了酒店预订、入住、房间、房型等，多表操作很多。（嗯，很好地练了下数据逻辑关系）</p>
+<p>3）这次酒店关系系统比较新的是，多了个营业额统计，也就是在页面显示图表，通过时间将营业额计算出来并绘制成图表，用的<strong>Apache的ECharts图表</strong>样式（<em>学习方法：*</em>跟easyui一样，去官网阅读文档，查看小实例*）<br>        另外，计算营业额用到的MySQL的语句：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">sum</span>(checkinPrice) <span class="keyword">as</span> money,<span class="keyword">DATE_FORMAT</span>(createTime,<span class="string">'%Y-%m'</span>) <span class="keyword">as</span> stats_date <span class="keyword">from</span> checkin <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">DATE_FORMAT</span>(createTime,<span class="string">'%Y-%m'</span>)</span></pre></td></tr></table></figure>
+
+<p>​        之前没怎么用过MySQL的函数进行数据查询，谨记！！！</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Java思想总结2.0</title>
+    <url>/2020/02/08/Java%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%932-0/</url>
+    <content><![CDATA[<blockquote>
+<p>2020-2-8</p>
+<a id="more"></a>
+</blockquote>
+<blockquote>
+<p><img src="/img/%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%93/2.0.jpg" alt></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>思想总结</category>
+      </categories>
+      <tags>
+        <tag>思想总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL添加外键1452错误</title>
+    <url>/2020/02/07/SQL%E6%B7%BB%E5%8A%A0%E5%A4%96%E9%94%AE1452%E9%94%99%E8%AF%AF/</url>
+    <content><![CDATA[<p>这几天码项目虽说出了很多bug，但都很快解决了，但直到今天只出了一次数据库操作方面的问题，值得谨记：</p>
+<a id="more"></a>
+
+
+
+<blockquote>
+<p>数据库表：</p>
+<p>1）authority(id, roleId, menuId)</p>
+<p>2）role</p>
+<p>3）menu</p>
+<p>原本authority添加了两个外键，分别是role和menu的id，但今天试错将操作数据库时不小心将authority的外键删除，后再添加一直报错：</p>
+<p><img src="/img/sql1452%E9%94%99%E8%AF%AF.PNG" alt></p>
+<p>百度说是中间表多了主表没有的数据</p>
+<p>检查网页和数据库，发现menu的id到35，authority中有个menuId为36的，将它删除重新添加外键，解决！</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>MySQL相关</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>学习待补坑一</title>
+    <url>/2020/01/30/%E5%AD%A6%E4%B9%A0%E5%BE%85%E8%A1%A5%E5%9D%91%E4%B8%80/</url>
+    <content><![CDATA[<p>异常<br>Error creating bean with name ‘systemController’: Unsatisfied dependency expressed through field</p>
+<a id="more"></a>
+
+<p>项目：SSM框架管理系统脚手架</p>
+<p>在编写SSM框架管理系统时，出现上述异常。总体意思就是依赖产生失败<br>查看cause by，具体问题出现在UserDao、UserService、UserServiceImpl三个之中某一类上</p>
+<p>百度解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">userDao的类上未添加@Repository注解，或者UserService、UserServiceImpl的类上未添加@Service注解</span></pre></td></tr></table></figure>
+
+<p>检查代码，发现都添加了，并不是未添加的情况</p>
+<p>再仔细看百度的说法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">没有添加注解，对象未注入容器中……注入容器中……注入容器中……注入容器中……</span></pre></td></tr></table></figure>
+
+<p>突然想到</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">加了@Repository注解后，有将dao的UserDao改过名的操作</span></pre></td></tr><tr><td class="code"><pre><span class="line">既然是注入容器，容器中是否存在缓存，存在的依然是改名前的对象，改名后的对象并没有注入容器中</span></pre></td></tr><tr><td class="code"><pre><span class="line">将@Repository注解删除重新添加，问题解决</span></pre></td></tr></table></figure>
+
+<p>此想法日后查资料有待证明！！！</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>unable to import maven project</title>
+    <url>/2020/01/25/unable-to-import-maven-project/</url>
+    <content><![CDATA[<blockquote>
+<p>今日份问题：<br>Unable to import maven project: See logs for details</p>
+<a id="more"></a>
+</blockquote>
+<pre><code>环境：
+    idea2018.3.1
+    maven:apache-maven-3.6.3</code></pre><p>查看日志：<br>    <img src="/img/unable-to-import-maven-project/%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97%E8%AF%A6%E6%83%85.png" alt><br>    <img src="/img/unable-to-import-maven-project/%E6%97%A5%E5%BF%97%E8%AF%A6%E6%83%85.png" alt></p>
+<pre><code>原因：
+    idea与maven版本不对应</code></pre><p>解决办法：<br>    换idea版本或者换maven版本<br>    <img src="/img/unable-to-import-maven-project/20180625234657359.png" alt></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>applicationContext配置文件引入约束没有提示问题</title>
+    <url>/2020/01/12/applicationContext%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%BC%95%E5%85%A5%E7%BA%A6%E6%9D%9F%E6%B2%A1%E6%9C%89%E6%8F%90%E7%A4%BA%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>applicationContext配置文件引入约束没有提示问题</p>
+<a id="more"></a>
+
+<p><beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xsi:schemalocation="
+        http://www.springframework.org/schema/beans                                         http://www.springframework.org/schema/beans/spring-beans.xsd"></beans></p>
+<p>解决步骤：</p>
+<p>​        1、复制约束路径<a href="http://www.springframework.org/schema/beans/spring-beans.xsd备用">http://www.springframework.org/schema/beans/spring-beans.xsd备用</a></p>
+<p>​        2、如图进行设置：</p>
+<p><img src="/img/spring1.PNG" alt></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>jsp引用js文件路径细节</title>
+    <url>/2020/01/09/jsp%E5%BC%95%E7%94%A8js%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E7%BB%86%E8%8A%82/</url>
+    <content><![CDATA[<p>与HTML书写基本相同，与之前引用失败对比：</p>
+<a id="more"></a>
+
+<p>① js文件放在WebRoot目录下，不是放在WEB-INF下；</p>
+<p>② src= “&lt;c:url value=’/ajax-lib/ajaxutils.js’ “；</p>
+<p><img src="/img/jsp&js.PNG" alt></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>JavaWeb思想总结1.0</title>
+    <url>/2019/12/30/JavaWeb%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%931-0/</url>
+    <content><![CDATA[<blockquote>
+<blockquote>
+<p>补12.20</p>
+<a id="more"></a>
+</blockquote>
+<blockquote>
+<p><img src="/img/%E6%80%9D%E6%83%B3%E6%80%BB%E7%BB%93/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20191230105910.jpg" alt></p>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>思想总结</category>
+      </categories>
+      <tags>
+        <tag>思想总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySql5.5安装教程</title>
+    <url>/2019/12/18/MySql5-5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>为了学习方便，安装MySql5.5，后期再安比较新的；</p>
+<a id="more"></a>
+
+<p>Window环境：8.1</p>
+<p>安装包：.msi为后缀的MySql5.5安装包</p>
+<p><strong>这边注意了，由于Win8的特性，会导致msi后缀的安装包权限不足而导致安装报2503错误！</strong></p>
+<p>搜索了很多提升权限的解决办法，都不适用自己的电脑，</p>
+<p>最后找到一种：</p>
+<p><em>任务管理器下选工具栏—&gt;文件—&gt;以管理员权限打开msi安装包！</em></p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/a.PNG" alt></p>
+<hr>
+<p>之后就一直安装就行了，其中有几个需要主要的地方，看下面图：</p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.png" alt></p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/2.png" alt></p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/3.png" alt></p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/4.png" alt></p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/5.png" alt></p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/6.png" alt></p>
+<hr>
+<p>检查安装情况：</p>
+<p>在注册管理器中的服务查看是否有MySql：</p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/b.png" alt></p>
+<hr>
+<p>登录MySql：</p>
+<p>mysql -uroot -p123</p>
+<p>退出：</p>
+<p>exit</p>
+<hr>
+<p>删除MySql：</p>
+<p><img src="/img/MySql5.5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/7.jpg" alt></p>
+]]></content>
+      <categories>
+        <category>MySQL相关</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>UnsupportedClassVersionError: org/dom4j/DocumentException : Unsupported major.minor version 52.0</title>
+    <url>/2019/12/16/UnsupportedClassVersionError-org-dom4j-DocumentException-Unsupported-major-minor-version-52-0/</url>
+    <content><![CDATA[<blockquote>
+<a id="more"></a>
+
+<p>用单元测试junit时报这个：</p>
+<p>问题：JDK版本过高</p>
+<p><u>使用Myeclipse进行测试时有几个部分涉及到JDK的版本，分别是：</u></p>
+<p>1）Myeclipse本身的JDK编译环境</p>
+<p>2）导入的包：如dom4j等</p>
+<p>3）项目使用的JDK版本</p>
+<p>当导入的包的编译环境大于myeclipse本身的JDK版本时就会报错；</p>
+<p>dom4j里面的JDK版本可以通过查看DocumentException.class文件查看：</p>
+<p><img src="/img/dom4jJDK/1.png" alt></p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>doGet()和doPost()方法的用法小结</title>
+    <url>/2019/12/15/doGet-%E5%92%8CdoPost-%E6%96%B9%E6%B3%95%E7%9A%84%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/</url>
+    <content><![CDATA[<p>案例：</p>
+<p>​    登录界面+验证码</p>
+<a id="more"></a>
+
+<p>​    访问登录界面login.jsp时会有两个请求，加载页面时会请求VerifyCodeServlet页面，获取验证码图片，此过程用的是doGet();<br>输入用户名和密码后，会跳转到LoginServlet，表单提交，用的是doPost();</p>
+<p>小结：<br>    1、doGet()一般用于向服务器请求数据，doPost()一般用于向服务器提交数据；<br>    2、表单提交一般用post方式提交；<br>    3、浏览器默认get方式请求数据，因此VerifyCodeServlet页面用doPot()方法会报错；<br>    （其他区别见思维导图）</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>me导入dom4j的jar包</title>
+    <url>/2019/12/09/me%E5%AF%BC%E5%85%A5dom4j%E7%9A%84jar%E5%8C%85/</url>
+    <content><![CDATA[<blockquote>
+<a id="more"></a>
+
+<p>1、在project目录下新建一个文件夹</p>
+<p>2、复制dom4j的jar包到新建的文件内</p>
+<p>3、右击jar包，选择build path—&gt;add to buildpath</p>
+<p>4、生成奶瓶装的jar包，就表示导入成功</p>
+</blockquote>
+<h4 id="导入xpath包步骤跟dom4j一样"><a href="#导入xpath包步骤跟dom4j一样" class="headerlink" title="导入xpath包步骤跟dom4j一样"></a>导入xpath包步骤跟dom4j一样</h4>]]></content>
+  </entry>
+  <entry>
+    <title>myeclipse安装教程</title>
+    <url>/2019/12/08/myeclipse%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<blockquote>
+<h3 id="myeclipse安装教程（2018）"><a href="#myeclipse安装教程（2018）" class="headerlink" title="myeclipse安装教程（2018）"></a>myeclipse安装教程（2018）</h3><a id="more"></a>
+<p>1、下载安装包，运行安装包.exe<br>2、安装完成之后，取消勾选“Launch MyEclipse CI”</p>
+</blockquote>
+<h3 id="不要运行软件！不要运行软件！"><a href="#不要运行软件！不要运行软件！" class="headerlink" title="不要运行软件！不要运行软件！"></a>不要运行软件！不要运行软件！</h3><blockquote>
+<p><img src="/img/myeclipsea%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.png" alt></p>
+</blockquote>
+<blockquote>
+<p>3、下载破解工具，网上百度就有很多，最好下载相应版本的工具<br>4、2018版破解工具解压后会有两个文件夹：</p>
+<p><img src="/img/myeclipsea%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/2.png" alt></p>
+<p>5、将path文件夹下的文件全复制到myeclipse安装位置的plugins文件夹中<br>6、双击运行MECracker文件夹下的cracker.jar，在window环境中很可能会双击不运行：<br>&nbsp;&nbsp;&nbsp;有几种可能：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1）环境变量没设置<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2）JDK版本不支持，换1.8<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3）可以运行cmd命令运行crack.bat文件</p>
+<p><img src="/img/myeclipsea%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/3.png" alt></p>
+<p>7、userCode随便输，然后步骤：userCode右边下拉框选BLUE——&gt;Systemid——&gt;Active</p>
+<p><img src="/img/myeclipsea%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/4.png" alt></p>
+<p>&nbsp;&nbsp;&nbsp;然后保存——&gt;替换</p>
+<p><img src="/img/myeclipsea%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/5.png" alt><br><img src="/img/myeclipsea%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/6.png" alt></p>
+</blockquote>
+<h3 id="破解完成"><a href="#破解完成" class="headerlink" title="破解完成"></a>破解完成</h3>]]></content>
+  </entry>
+  <entry>
+    <title>时间复杂度</title>
+    <url>/2019/12/06/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/</url>
+    <content><![CDATA[<blockquote>
+<a id="more"></a>
+
+<p>时间复杂度：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;定量描述了算法的运行时间的函数。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;表达式：  &nbsp;&nbsp;T（n）= O（f（n））<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T（n）：时间规模函数；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f（n）：算法的基本操作重复执行次数的某一个函数；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n：表示问题的规模；</p>
+</blockquote>
+<p>渐进时间复杂度：O（f（n））<br>在n趋向于无穷时，T（n）/f（n）的值为一个非0常数，则称f（n）为T（n）的同数量级函数；</p>
+<pre><code>推导出时间复杂度的原则：</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;1）如果运行时间是常数量级，用常数1表示；<br>&nbsp;&nbsp;&nbsp;&nbsp;2）只保留时间函数中的最高阶项；<br>&nbsp;&nbsp;&nbsp;&nbsp;3）如果最高阶项存在，则省去最高阶项前面的系数</p>
+<p>示例：<br>1）T（n）=3n&nbsp;&nbsp;线性<br>&nbsp;&nbsp;最高阶项3n，省去系数3，T(n)=O(n)</p>
+<hr>
+<p>2)T(n) = 5log(2)&nbsp;&nbsp;对数<br>&nbsp;&nbsp;最高阶项5log(2)n，省去系数5，T(n) = O(log(2)n)</p>
+<hr>
+<p>3)T(n) = 2&nbsp;&nbsp;常量<br>n&nbsp;&nbsp;常数量级，T(n) = O(1)</p>
+<hr>
+<p>4)T(n) = 0.5n^2+0.5n&nbsp;&nbsp;多项式<br>n&nbsp;&nbsp;最高阶项0.5n^2，省去系数0.5，T(n) = O(n^2)</p>
+<p>n趋于无穷大时，耗费时长：<br>3）&lt;2）&lt;1）&lt;4）</p>
+<hr>
+<p>参考：<br>&nbsp;&nbsp; <a href="https://blog.csdn.net/qq_41523096/article/details/82142747">https://blog.csdn.net/qq_41523096/article/details/82142747</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>yml是什么</title>
+    <url>/2019/12/04/yml%E6%98%AF%E4%BB%80%E4%B9%88/</url>
+    <content><![CDATA[<blockquote>
+<p>今天是修改博客样式的第二天。从昨天开始就捣鼓yilia这个主题的文件，搜索html文件或者xml文件在哪，结果翻遍了也没发现。</p>
+<p>后来留意到一个后缀为.yml的文件，用sublime打开，里面是跟properties类似的存储方式的文件，百科了一下，明白了怎么去操作yilia主题了。</p>
+<a id="more"></a>
+
+<h3 id="yml是神马？"><a href="#yml是神马？" class="headerlink" title=".yml是神马？"></a>.yml是神马？</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&gt;YML文件格式是YAML (YAML Aint Markup Language)编写的文件格式，YAML是一种直观的能够被电脑识别的的数据数据序列化格式，并且容易被人类阅读，容易和脚本语言交互的，可以被支持YAML库的不同的编程语言程序导入，比如： C/C++, Ruby, Python, Java, Perl, C#, PHP等。</span></pre></td></tr></table></figure>
+</blockquote>
+<p>了解了该文件结构后，看看编辑文档，就开始进行样式的改动。</p>
+<p>举两个简单地小栗子：</p>
+<p>1、修改头像，如下图所示，将avatar后的值改为你的头像文件的相对路径：</p>
+<p>​        <img src="/img/1.png" alt></p>
+<p>2、yilia中的_config.yml文档中有很多是直接注释掉就可以定义格式的，比如可以将图中显示的那一行注释掉，然后在编辑博客时加上注释“&lt;!– more –&gt;”就可以实现在博客中只显示部分内容了：</p>
+<p><img src="/img/2.png" alt></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>我在Windows环境下创建了第一个博客</title>
+    <url>/2019/12/02/%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​        这是我入坑Java后用Hexo制作的第一个静态博客，制作过程通过观看B站CodeSheep的视频和各种解bug的博客，非常感谢他们！</p>
+<a id="more"></a>
+
+<h3 id="步骤一：安装好NodeJs和git"><a href="#步骤一：安装好NodeJs和git" class="headerlink" title="步骤一：安装好NodeJs和git"></a>步骤一：安装好NodeJs和git</h3><p>NodeJs安装方面看不懂我总结的操作的小伙伴可以参考<a href="https://blog.csdn.net/zjh_746140129/article/details/80460965，很详细。">https://blog.csdn.net/zjh_746140129/article/details/80460965，很详细。</a></p>
+<p>1、安装NodeJs。安装包可以直接从官网上下，无论是下解压版还是安装程序都一样；</p>
+<p>2、配置NodeJs的环境变量，并在安装Node的目录下创建两个文件夹：node_global和node_cache；</p>
+<p>3、在cmd界面输入：（具体目的好像是让npm install的操作都在这两个文件夹下？）</p>
+<p>​                npm config set prefix “Node安装目录\node_global”</p>
+<p>​                npm config set cache “Node安装目录\node_cache”</p>
+<p>4、测试安装配置结果：cmd界面输入npm install express -g，安装常用的模块；</p>
+<p>5、安装cnpm工具（镜像安装）：</p>
+<p>​        npm install -g cnpm –registry=<a href="https://registry.npm.taobao.org；">https://registry.npm.taobao.org；</a></p>
+<p>6、安装git，直接去官网下载即可，官网下载地址<a href="https://git-scm.com/download/win，之后配置好环境变量；">https://git-scm.com/download/win，之后配置好环境变量；</a></p>
+<h3 id="步骤二：建立初始博客"><a href="#步骤二：建立初始博客" class="headerlink" title="步骤二：建立初始博客"></a>步骤二：建立初始博客</h3><p>1、在node_global的目录下，通过cnpm install -g hexo-cli安装hexo博客框架；</p>
+<p>2、目录不变创建一个博客文件夹；</p>
+<p>3、使用hexo init命令初始化一个博客</p>
+<p>​        这一步很多人报错没有git，提前安装好git并配好环境变量就行了；</p>
+<p>4、到这一步，博客就初始化完成了，cmd进入创建的博客文件夹目录下，通过hexo server开启hexo服务，然后通过localhost:4000就能本地登录博客了；</p>
+<h4 id="至此，博客创建完成！"><a href="#至此，博客创建完成！" class="headerlink" title="至此，博客创建完成！"></a>至此，博客创建完成！</h4><h3 id="写博客"><a href="#写博客" class="headerlink" title="写博客"></a>写博客</h3><p>1、进入博客网页后，会自动生成一个Hello博客，博客内容是一系列从操作hexo的命令；</p>
+<p>2、在cmd界面上输入hexo n “博客名”，就会在你的博客目录下再生成一个后缀为md的博客文件，给博客加内容可以通过cmd进入vim编辑器打开文件或者下载Typora（推荐）进行内容编辑；</p>
+<p>3、修改完博客可以在blog目录下进行下列命令：</p>
+<p>​        hexo clean：清理hexo数据痕迹；（同时删除页面样式）</p>
+<p>​        hexo g：生成hexo修改数据；</p>
+<h3 id="将博客部署到远端（github）"><a href="#将博客部署到远端（github）" class="headerlink" title="将博客部署到远端（github）"></a>将博客部署到远端（github）</h3><p>1、登录github网站，建立仓库：<strong>注意，仓库名必须和github用户名相同</strong>，否则推到服务端会报404；</p>
+<p>2、在blog目录下安装git插件：</p>
+<p>​        npm install hexo-deployer-git –save</p>
+<p>3、安装完git插件后，会在blog目录下生成一个_config.yml文件，配置文件中几个信息：</p>
+<p>​    <strong>（注意：冒号后有个空格！！！）</strong></p>
+<p>​            type: git</p>
+<p>​            repo: 你创建的github仓库地址</p>
+<p>​            branch: master</p>
+<p>4、修改完后将blog文件夹推到github远端：cmd界面输hexo d；（此步骤前如果是第一次下git，需            要先给git配置用户信息）；</p>
+<p>​            配置用户信息操作参考：<a href="https://blog.csdn.net/qq_15437667/article/details/51029757">https://blog.csdn.net/qq_15437667/article/details/51029757</a></p>
+<p>5、推成功后就可以用仓库名访问博客了；</p>
+<h3 id="自定义博客主题"><a href="#自定义博客主题" class="headerlink" title="自定义博客主题"></a>自定义博客主题</h3><p>1、获取博客主题文件。这边推荐CodeSheep视频中推荐的一个：</p>
+<p>​            github.com/litten/hexo-theme-yilia</p>
+<p>2、通过克隆方式下载主题到blog文件中：</p>
+<p>​            git clone <a href="https://github.com/litten/hexo-theme-yilia.git">https://github.com/litten/hexo-theme-yilia.git</a> themes/yilia</p>
+<p>​            git clone <a href="https://github.com/iissnan/hexo-theme-next">https://github.com/iissnan/hexo-theme-next</a> themes/next</p>
+<p>3、将主题配置给blog，通过修改_config.yml文件中：</p>
+<p>​            theme: yilia</p>
+<p>4、进行下列命令：</p>
+<p>​        hexo clean</p>
+<p>​        hexo g</p>
+<p>5、推到远端</p>
+<p>​        hexo d</p>
+<h3 id="修改博客背景图片"><a href="#修改博客背景图片" class="headerlink" title="修改博客背景图片"></a>修改博客背景图片</h3><blockquote>
+<p>修改后样式：</p>
+<p><img src="/img/%E5%8D%9A%E5%AE%A2/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE_2020-03-03_13-25-14.png" alt></p>
+<h4 id="修改主题配置"><a href="#修改主题配置" class="headerlink" title="修改主题配置"></a>修改主题配置</h4><h5 id="1、找到themes-yilia-目录下的-config-yml-修改配置："><a href="#1、找到themes-yilia-目录下的-config-yml-修改配置：" class="headerlink" title="1、找到themes\yilia\目录下的_config.yml,修改配置："></a>1、找到<code>themes\yilia\</code>目录下的<code>_config.yml</code>,修改配置：</h5><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">&gt;style:</span></span></pre></td></tr><tr><td class="code"><pre><span class="line"> <span class="comment"># 头像上面的背景颜色</span></span></pre></td></tr><tr><td class="code"><pre><span class="line"> <span class="attr">header:</span> <span class="string">'#00000'</span></span></pre></td></tr><tr><td class="code"><pre><span class="line"> <span class="comment"># 右滑板块背景</span></span></pre></td></tr><tr><td class="code"><pre><span class="line"> <span class="attr">slider:</span> <span class="string">'linear-gradient(200deg,#a0cfe4,#e8c37e)'</span></span></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<h5 id="2、把选好的背景图片放到themes-yilia-source目录下"><a href="#2、把选好的背景图片放到themes-yilia-source目录下" class="headerlink" title="2、把选好的背景图片放到themes\yilia\source目录下"></a>2、把选好的背景图片放到<code>themes\yilia\source</code>目录下</h5><p>图像推荐大小：700 x 1200</p>
+<h5 id="3、打开yilia-source目录下的main-xxxx-css-进行修改"><a href="#3、打开yilia-source目录下的main-xxxx-css-进行修改" class="headerlink" title="3、打开yilia\source目录下的main.xxxx.css,进行修改"></a>3、打开<code>yilia\source</code>目录下的<code>main.xxxx.css</code>,进行修改</h5><h6 id="Crtl-F搜索-left-col-、-left-col-overlay-以及-mobile-nav-overlay"><a href="#Crtl-F搜索-left-col-、-left-col-overlay-以及-mobile-nav-overlay" class="headerlink" title="Crtl + F搜索.left-col{、.left-col .overlay{以及#mobile-nav .overlay"></a>Crtl + F搜索<code>.left-col{</code>、<code>.left-col .overlay{</code>以及#mobile-nav .overlay</h6><figure class="highlight css"><table><tr><td class="code"><pre><span class="line">&gt;<span class="selector-class">.left-col</span>&#123;<span class="attribute">background-image</span>:<span class="built_in">url</span>(<span class="string">"11.jpg"</span>);</span></pre></td></tr><tr><td class="code"><pre><span class="line">   <span class="attribute">width</span>:<span class="number">300px</span>;<span class="attribute">position</span>:fixed;<span class="attribute">opacity</span>:<span class="number">1</span>;<span class="attribute">transition</span>:all .<span class="number">2s</span> ease-in;<span class="attribute">height</span>:<span class="number">100%</span>;</span></pre></td></tr><tr><td class="code"><pre><span class="line">   <span class="attribute">z-index</span>:<span class="number">999</span>&#125;</span></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">&gt;<span class="selector-class">.left-col</span> <span class="selector-class">.overlay</span>&#123;<span class="attribute">background-image</span>:<span class="built_in">url</span>(<span class="string">"11.jpg"</span>);</span></pre></td></tr><tr><td class="code"><pre><span class="line">   <span class="attribute">width</span>:<span class="number">100%</span>;<span class="attribute">height</span>:<span class="number">180px</span>;<span class="attribute">position</span>:absolute&#125;</span></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">&gt;<span class="selector-id">#mobile-nav</span> <span class="selector-class">.overlay</span>&#123;<span class="attribute">height</span>:<span class="number">110px</span>;<span class="attribute">position</span>:absolute;<span class="attribute">width</span>:<span class="number">100%</span>;<span class="attribute">z-index</span>:<span class="number">2</span>;</span></pre></td></tr><tr><td class="code"><pre><span class="line">   <span class="attribute">background-image</span>:<span class="built_in">url</span>(<span class="string">"11.jpg"</span>)&#125;</span></pre></td></tr></table></figure>
+
+<p>分别在括号里面加上属性：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">&gt;<span class="selector-tag">background-image</span><span class="selector-pseudo">:url("11.jpg")</span>;</span></pre></td></tr></table></figure>
+
+<p>如果图片存储在网络上，可以不进行第2步，第3步添加的代码改成：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">&gt;<span class="selector-tag">background-image</span><span class="selector-pseudo">:url("</span>图片地址");</span></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h3><p>1、B站upzhu主CodeSheep视频（强烈推荐）；</p>
+<p>2、以上内容出现过的链接的博客；</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2019/12/01/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<a id="more"></a>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+</search>
