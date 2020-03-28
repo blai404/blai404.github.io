@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blai404.github.io/"/>
-  <updated>2020-03-20T04:10:21.029Z</updated>
+  <updated>2020-03-28T00:39:11.867Z</updated>
   <id>http://blai404.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git push</title>
+    <link href="http://blai404.github.io/2020/03/28/git-push/"/>
+    <id>http://blai404.github.io/2020/03/28/git-push/</id>
+    <published>2020-03-28T00:31:31.000Z</published>
+    <updated>2020-03-28T00:39:11.867Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+&lt;p&gt;推送本地源码到git仓库，报错：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/git-push/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE_2020-03-25_18-00-22.png&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="git" scheme="http://blai404.github.io/categories/git/"/>
+    
+    
+      <category term="git push" scheme="http://blai404.github.io/tags/git-push/"/>
+    
+  </entry>
   
   <entry>
     <title>java.sql.SQLSyntaxErrorException:sql_mode=only_full_group_by</title>
@@ -261,7 +291,7 @@
     <link href="http://blai404.github.io/2019/12/18/MySql5-5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/"/>
     <id>http://blai404.github.io/2019/12/18/MySql5-5%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/</id>
     <published>2019-12-18T02:16:28.000Z</published>
-    <updated>2020-03-20T04:10:37.552Z</updated>
+    <updated>2020-03-28T00:34:04.582Z</updated>
     
     <summary type="html">
     
@@ -272,6 +302,8 @@
     
       <category term="MySQL相关" scheme="http://blai404.github.io/categories/MySQL%E7%9B%B8%E5%85%B3/"/>
     
+    
+      <category term="mysql安装" scheme="http://blai404.github.io/tags/mysql%E5%AE%89%E8%A3%85/"/>
     
   </entry>
   
@@ -355,25 +387,6 @@
     <summary type="html">
     
       &lt;blockquote&gt;&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>yml是什么</title>
-    <link href="http://blai404.github.io/2019/12/04/yml%E6%98%AF%E4%BB%80%E4%B9%88/"/>
-    <id>http://blai404.github.io/2019/12/04/yml%E6%98%AF%E4%BB%80%E4%B9%88/</id>
-    <published>2019-12-03T16:50:37.000Z</published>
-    <updated>2019-12-05T17:34:30.261Z</updated>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;今天是修改博客样式的第二天。从昨天开始就捣鼓yilia这个主题的文件，搜索html文件或者xml文件在哪，结果翻遍了也没发现。&lt;/p&gt;
-&lt;p&gt;后来留意到一个后缀为.yml的文件，用sublime打开，里面是跟properties类似的存储方式的文件，百科了一下，明白了怎么去操作yilia主题了。&lt;/p&gt;&lt;/blockquote&gt;
     
     </summary>
     

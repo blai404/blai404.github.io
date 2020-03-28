@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>git push</title>
+    <url>/2020/03/28/git-push/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<p>推送本地源码到git仓库，报错：</p>
+<p><img src="/img/git-push/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE_2020-03-25_18-00-22.png" alt></p>
+<p>查了百度了解是远程仓库和本地仓库不一致，远程仓库有文件，在本地仓库却没有，需要先把本地仓库先更新到和远程仓库一致的状态。</p>
+<p>所以执行下列步骤：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">git pull --rebase origin master</span></pre></td></tr><tr><td class="code"><pre><span class="line">git push -u origin master</span></pre></td></tr></table></figure>
+
+<p>就能成功的将本地代码推到远程仓库了。</p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git push</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>java.sql.SQLSyntaxErrorException:sql_mode=only_full_group_by</title>
     <url>/2020/03/18/java-sql-SQLSyntaxErrorException-sql-mode-only-full-group-by/</url>
     <content><![CDATA[<p>Error Code: 1055.Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column person_info.</p>
@@ -374,6 +394,9 @@
       <categories>
         <category>MySQL相关</category>
       </categories>
+      <tags>
+        <tag>mysql安装</tag>
+      </tags>
   </entry>
   <entry>
     <title>UnsupportedClassVersionError: org/dom4j/DocumentException : Unsupported major.minor version 52.0</title>
